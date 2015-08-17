@@ -23,6 +23,12 @@
         return this.items_length;
     };
     
+    Collection.prototype.getElements = function() {
+        return this.items.map( function( item ) {
+            return item.element;
+        } );
+    };
+    
     Collection.prototype.each = function( iterator ) {
         var i,
             item;
@@ -88,7 +94,7 @@
         }
     };
     
-    Collection.prototype.processFew = function( action_name, elements ) {
+    Collection.prototype._processFew = function( action_name, elements ) {
         var length = elements.length,
             i;
             
@@ -100,11 +106,11 @@
     };
     
     Collection.prototype.addFew = function( elements ) {
-        return this.processFew( 'add', elements );
+        return this._processFew( 'add', elements );
     };
     
     Collection.prototype.removeFew = function( elements ) {
-        return this.processFew( 'remove', elements );
+        return this._processFew( 'remove', elements );
     };
     
     Collection.prototype.merge = function( selector ) {
@@ -127,6 +133,17 @@
                 that.remove( item.element );
             }
         } );
+        
+        return this;
+    };
+    
+    Collection.prototype.refresh = function() {
+        var elements = this.getElements();
+        
+        this.clear();
+        this.addFew( elements );
+        
+        return this;
     };
     
     window.Collection = window.Collection || Collection;
